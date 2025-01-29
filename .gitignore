@@ -1,0 +1,24 @@
+# Ignorar arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Ignorar dependências
+node_modules/
+venv/
+__pycache__/
+
+# Ignorar configurações do editor (como VS Code)
+.vscode/
+.idea/
+
+# Ignorar arquivos de log
+*.log
+logs/
+
+# Ignorar arquivos de build/compilação
+dist/
+build/
+*.pyc
+
+#Ignorar conexão com o banco de dados
+BancoDados.py
