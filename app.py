@@ -9,3 +9,6 @@ print(Segmento)
 
 if conn:
     close_connection(conn)
+
+
+st.selectbox('Escolha o segmento' + Segmento)
