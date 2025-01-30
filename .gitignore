@@ -21,4 +21,4 @@ build/
 *.pyc
 
 #Ignorar conexão com o banco de dados
-BancoDados.py
+database.py

@@ -1,45 +1,40 @@
-from BancoDados import get_connection, close_connection, list_schemas, get_sales_data, check_table_exists
+from model.database import get_connection, run_query 
 import streamlit as st
 import plotly.express as px
+import orjson as oj
+from model.queries import QUERIES
+from model.database import run_query
 
 
 conn = get_connection()
 
-Segmento = list(list_schemas(conn))
+##Segmento = list(list_schemas(conn))
 
 
 st.title("📊 Dashboard Empresarial")
 
 # Selectbox para o usuário escolher um segmento
-if Segmento:
-    segmento_escolhido = st.selectbox('Escolha o segmento:', Segmento)
 
-    if segmento_escolhido:  
-        if check_table_exists(segmento_escolhido):
-            dados = get_sales_data(segmento_escolhido)
+segmento = st.selectbox('Escolha o segmento:', list(QUERIES.keys()))
 
-    # Exibir os dados se houver resultado
-            if not dados.empty:
-             st.write(f"📈 Receita total por data para o schema: **{segmento_escolhido}**")
+if segmento in QUERIES:
+    dados = run_query(QUERIES[segmento])
 
+    if not dados.empty:
+        st.subheader(f"📈 Análise de {segmento}")
 
-             # 📊 Gráfico de Barras - Receita por Data
-            st.subheader("Receita Total por Data")
-            st.bar_chart(dados.set_index("data_venda")["total_receita"])
+        # Gráfico de barras
+        fig_bar = px.bar(dados, x="data_venda", y="total_receita",
+                         labels={"data_venda": "Data", "total_receita": "Receita"},
+                         title=f"Receita Total - {segmento}",
+                         text_auto=True)
+        st.plotly_chart(fig_bar)
 
-             # 📈 Gráfico de Linhas - Evolução da Receita
-            st.subheader("Evolução da Receita ao Longo do Tempo")
-            fig_linhas = px.line(dados, x="data_venda", y="total_receita", title="Evolução da Receita")
-            st.plotly_chart(fig_linhas)
+        # Gráfico de linha
+        fig_line = px.line(dados, x="data_venda", y="total_receita",
+                           labels={"data_venda": "Data", "total_receita": "Receita"},
+                           title=f"Evolução da Receita - {segmento}")
+        st.plotly_chart(fig_line)
 
-            # 🎂 Gráfico de Pizza - Distribuição da Receita por Categoria
-            st.subheader("Distribuição da Receita por Categoria")
-            fig_pizza = px.pie(dados, values="total_receita", names="categoria", title="Receita por Categoria")
-            st.plotly_chart(fig_pizza)
-
-        else:
-            st.warning("Nenhum dado encontrado para esse segmento.")
     else:
-        st.error(f"A tabela 'vendas' não existe no segmento '{segmento_escolhido}'.")
-else:
-    st.error("Nenhum segmento encontrado no banco.")
+        st.warning(f"Nenhum dado encontrado para {segmento}.")
