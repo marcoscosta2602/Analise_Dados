@@ -4,13 +4,13 @@ import orjson as oj
 
 def varejo_chart(df):
     """Gráficos exclusivos para o segmento Varejo."""
-    st.subheader("📈 Receita Total - Varejo")
-    fig = px.bar(df, x="data_venda", y="total_receita", text_auto=True,
-                 labels={"data_venda": "Data", "total_receita": "Receita"})
+    st.subheader("📈 Total De Vendas Por Dia")
+    fig = px.bar(df, x="data_venda", y="quantidade_vendas", text_auto=True,
+                 labels={"data_venda": "Data", "quantidade_vendas": "Receita"})
     st.plotly_chart(fig)
 
  # 📈 Gráfico de Linhas - Evolução da Receita
-    st.subheader("📊 Evolução da Receita ao Longo do Tempo")
+    st.subheader("📊 Total De Receita Por Dia")
     fig_linhas = px.line(df, x="data_venda", y="total_receita", title="Evolução da Receita")
     st.plotly_chart(fig_linhas)
 

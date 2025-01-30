@@ -2,11 +2,11 @@ from model.database import get_connection
 
 QUERIES = {
     "Varejo": """
-    Select v.data_venda, p.categoria, p.nome_produto, SUM(v.receita) as total_receita 
-    FROM "AnaliseDados"."Varejo".vendas as v 
-    join "Varejo".produtos p on p.id_produto = v.id_produto 
-    GROUP BY v.data_venda, p.categoria, v.receita, p.nome_produto
-    ORDER BY v.data_venda
+        SELECT v.data_venda, p.categoria, p.nome_produto, sum(v.quantidade) as quantidade_vendas, SUM(v.receita) as total_receita
+        FROM "AnaliseDados"."Varejo".vendas as v 
+        join "Varejo".produtos p on p.id_produto = v.id_produto 
+        GROUP BY v.data_venda, p.categoria, v.receita, v.quantidade, p.nome_produto 
+        ORDER BY v.data_venda
     """,
     "Saúde": """
         SELECT data_consulta AS data_venda, SUM(valor_consulta) AS total_receita

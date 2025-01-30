@@ -6,3 +6,5 @@ def get_segment_data(segmento):
     if segmento in QUERIES:
         return run_query(QUERIES[segmento])
     return None
+
+
