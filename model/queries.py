@@ -1,10 +1,12 @@
 from model.database import get_connection
+
 QUERIES = {
     "Varejo": """
-        SELECT data_venda, SUM(receita) AS total_receita
-        FROM "AnaliseDados"."Varejo".vendas
-        GROUP BY data_venda
-        ORDER BY data_venda;
+    Select v.data_venda, p.categoria, p.nome_produto, SUM(v.receita) as total_receita 
+    FROM "AnaliseDados"."Varejo".vendas as v 
+    join "Varejo".produtos p on p.id_produto = v.id_produto 
+    GROUP BY v.data_venda, p.categoria, v.receita, p.nome_produto
+    ORDER BY v.data_venda
     """,
     "Saúde": """
         SELECT data_consulta AS data_venda, SUM(valor_consulta) AS total_receita
