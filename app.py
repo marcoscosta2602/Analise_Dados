@@ -1,23 +1,34 @@
 import streamlit as st
 from controller.controller import get_segment_data
-from view.charts import varejo_chart, saude_chart, tecnologia_chart
+from view.charts import VarejoDashboard, SaúdeDashboard, TecnologiaDashboard
 from model.queries import QUERIES
 
+ # 📌 Criar navegação na barra lateral
+st.sidebar.header("📌 Escolha o Segmento")
+segmento = st.sidebar.selectbox("Segmento:", list(QUERIES.keys()))
 
-st.title("📊 Dashboard Empresarial")
+with st.container():
+  
+    # Buscar os dados do segmento
+    dados = get_segment_data(segmento)
 
 
-# Selectbox para o usuário escolher um segmento
-segmento = st.selectbox('Escolha o segmento:', list(QUERIES.keys()))
+    if dados is not None and not dados.empty:
+        if segmento == "Varejo":
+            dashboard = VarejoDashboard(dados)
+            dashboard.exibir_graficos()
 
-dados = get_segment_data(segmento)
+        elif segmento == "Saúde":
+            dashboard = SaúdeDashboard(dados)
+            dashboard.exibir_graficos()
 
-if dados is not None and not dados.empty:
-    if segmento == "Varejo":
-        varejo_chart(dados)
-    elif segmento == "Saúde":
-        saude_chart(dados)
-    elif segmento == "Tecnologia":
-        tecnologia_chart(dados)
-else:
-    st.warning(f"Nenhum dado encontrado para {segmento}.")
+        elif segmento == "Tecnologia":
+            dashboard = TecnologiaDashboard(dados)
+            dashboard.exibir_graficos()
+
+    else:
+        st.warning(f"Nenhum dado encontrado para {segmento}.")
+
+
+
+
