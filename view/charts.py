@@ -14,11 +14,15 @@ class VarejoDashboard:
 
     def total_vendas_chart(self):
         fig = px.bar(self.dados, x="data_venda", y="quantidade_vendas", title="📈 Vendas Totais - Por Dia", height=500)
+        fig.add_hline(y=3, line_dash="dash", line_color="red", annotation_text=f"Meta: {3}", 
+                  annotation_position="top left", annotation_font_size=12   )
         fig.update_layout(showlegend=False, title_x=0.34)
         return fig
 
     def total_receita_chart(self):
         fig = px.line(self.dados, x="data_venda", y="total_receita", title="💰 Receita Total - Por Dia", markers=True, height=500)
+        fig.add_hline(y=2800, line_dash="dash", line_color="red", annotation_text=f"Meta: {2800}", 
+                  annotation_position="top left", annotation_font_size=12   )
         fig.update_layout(showlegend=False, title_x=0.34)
         return fig
 
